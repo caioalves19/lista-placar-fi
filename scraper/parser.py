@@ -24,7 +24,6 @@ def parser_itens_placar(itens_placar):
     for item in itens_placar:
 
         item_class = item.get_attribute("class")
-        print(item.text, item_class)
 
         if item_class == "scoreboard__tag":
             if item.text.lower() == "ao vivo":

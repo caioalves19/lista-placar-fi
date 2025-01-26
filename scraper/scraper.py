@@ -1,19 +1,31 @@
 from selenium.webdriver import FirefoxOptions
+from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.chrome.service import Service as ChromeService
 from time import sleep
-
-from models.Campeonato import Campeonato
-from models.Jogo import Jogo
 from scraper.parser import parser_itens_placar
 
 
+def iniciar_driver():
+    try:
+        options = FirefoxOptions()
+        options.add_argument("--headless")
+        driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
+        return driver
+    except Exception:
+        options = ChromeOptions()
+        options.add_argument("--headless")
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+        print("Chrome detected and used.")
+        return driver
+
+
 def scrape_jogos(link):
-    options = FirefoxOptions()
-    options.add_argument("--headless")
-    driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
+    driver = iniciar_driver()
     driver.maximize_window()
 
     try:
